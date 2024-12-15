@@ -1,23 +1,21 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-
-import { useDispatch } from 'react-redux';
-import { removeItem } from '@/store/wishlistSlice';
+import { useGetWishlistQuery, useRemoveWishlistItemMutation } from '@/store/apiSlice';
 
 export default function Wishlist() {
-  const wishlist = useSelector((state: RootState) => state.wishlist.items);
+  const { data: wishlist = [], isLoading, error } = useGetWishlistQuery();
+  const [removeWishlistItem] = useRemoveWishlistItemMutation();
 
-  const dispatch = useDispatch();
-
-  const handleRemove = (id: string) => {
-    dispatch(removeItem(id));
-  };
-
-  if (wishlist.length === 0) {
-    return <p>Your wishlist is empty!</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (error) {
+    const errorMessage =
+      'status' in error
+        ? `Error ${error.status}: ${(error.data as any)?.message || 'Unknown error'}`
+        : error.message || 'Unknown error';
+    return <p>{errorMessage}</p>;
   }
+
+  if (!wishlist.length) return <p>No data available</p>;
 
   return (
     <div>
@@ -26,7 +24,7 @@ export default function Wishlist() {
         {wishlist.map((item) => (
           <li key={item.id}>
             {item.name}
-            <button onClick={() => handleRemove(item.id)}>Remove</button>
+            <button onClick={() => removeWishlistItem(item.id)}>Remove</button>
           </li>
         ))}
       </ul>

@@ -1,10 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import wishlistReducer from './wishlistSlice';
+import { todoApi, wishlistApi } from './apiSlice';
 
 export const store = configureStore({
   reducer: {
-    wishlist: wishlistReducer,
+    [wishlistApi.reducerPath]: wishlistApi.reducer,
+    [todoApi.reducerPath]: todoApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(todoApi.middleware)
+      .concat(wishlistApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

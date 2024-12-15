@@ -1,22 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addItem } from '@/store/wishlistSlice';
+import { useAddWishlistItemMutation } from '@/store/apiSlice';
 
-export default function AddWish() {
+export default function AddWishForm() {
   const [wish, setWish] = useState('');
-  const dispatch = useDispatch();
+  const [addWishlistItem] = useAddWishlistItemMutation();
 
-  const handleAdd = () => {
+  const handleAddWish = async () => {
     if (wish.trim() === '') return;
 
-    dispatch(
-      addItem({
-        id: Date.now().toString(),
-        name: wish,
-      })
-    );
+    const newWish = {
+      id: Date.now().toLocaleString().replace(/\s+/g, ''),
+      name: wish,
+    };
+
+    await addWishlistItem(newWish);
 
     setWish('');
   };
@@ -31,7 +30,7 @@ export default function AddWish() {
         onChange={(e) => setWish(e.target.value)}
         placeholder="Enter your wish"
       />
-      <button onClick={handleAdd}>Add</button>
+      <button onClick={handleAddWish}>Add</button>
     </div>
   );
 }
