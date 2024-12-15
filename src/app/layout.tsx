@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Link href="/">Home</Link> | <Link href={"/todo"}>Todo List</Link>
+        <Link href="/">Home</Link> | <Link href={"/todo"}>Tasks List</Link>
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

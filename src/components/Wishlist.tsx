@@ -7,13 +7,7 @@ export default function Wishlist() {
   const [removeWishlistItem] = useRemoveWishlistItemMutation();
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) {
-    const errorMessage =
-      'status' in error
-        ? `Error ${error.status}: ${(error.data as any)?.message || 'Unknown error'}`
-        : error.message || 'Unknown error';
-    return <p>{errorMessage}</p>;
-  }
+  if (error) return <p>Error: {error.toString()}</p>;
 
   if (!wishlist.length) return <p>No data available</p>;
 
